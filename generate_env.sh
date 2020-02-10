@@ -1,0 +1,3 @@
+#!/bin/bash
+
+export go_kubernetes_db_driver=mysql go_kubernetes_db_host=localhost go_kubernetes_db_port=3307 go_kubernetes_db_name=go_kubernetes go_kubernetes_db_user=root go_kubernetes_db_password=passw0rd

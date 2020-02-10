@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: go-kubernetes-apps
+---
+apiVersion: apps/v1
+kind: Deployment    # Type of Kubernetes resource
+metadata:
+    name: go-kubernetes  # Name of the Kubernetes resource
+    namespace: go-kubernetes-apps
+spec:
+    replicas: 3  # Number of pods to run at any given time
+    selector:
+        matchLabels:
+            app: go-kubernetes   # This deployment applies to any Pods matching the specified label
+    template:   # This deployment will create a set of pods using the configurations in this template
+        metadata:
+            labels: # The labels that will be applied to all of the pods in this deployment
+                app: go-kubernetes
+        spec:   # Spec for the container which will run in the Pod
+            containers:
+            - name: go-kubernetes
+              image: danympradana/go-kubernetes:1.1.0
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8000   # Should match the port number that the Go application listens on
+              livenessProbe:    # To check the health of the Pod
+                httpGet:
+                  path: /healt-check # This route must exist in the application, if not exist the pods will crash loopback off
+                  port: 8000
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 15
+                timeoutSeconds: 5
+              readinessProbe:          # To check if the Pod is ready or not
+                httpGet:
+                  path: /readiness  # This route must exist in the application, if not exist the pods will crash loopback off
+                  port: 8000
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                timeoutSeconds: 1
+              envFrom:
+                - configMapRef:
+                    name: go-kubernetes-apps-configmap
+                - secretRef:
+                    name: go-kubernetes-apps-secrets    
+---
+apiVersion: v1
+kind: Service                    # Type of kubernetes resource
+metadata:
+  name: go-kubernetes-service   # Name of the resource
+  namespace: go-kubernetes-apps
+spec:
+  type: NodePort                 # A port is opened on each node in your cluster via Kube proxy.
+  ports:                         # Take incoming HTTP requests on port 9090 and forward them to the targetPort of 8000
+  - name: http
+    port: 9090
+    targetPort: 8000
+  selector:
+    app: go-kubernetes         # Map any pod with label `app=go-kubernetes` to this service

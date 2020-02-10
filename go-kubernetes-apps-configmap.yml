@@ -1,0 +1,13 @@
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: go-kubernetes-apps-configmap
+  namespace: go-kubernetes-apps
+data:
+  # Configuration values can be set as key-value properties
+  go_kubernetes_db_driver: "mysql"
+  go_kubernetes_db_host: "mysql-service.default.svc.cluster.local"
+  go_kubernetes_db_port: "3306"
+  go_kubernetes_db_name: "go_kubernetes"
+  #go_kubernetes_db_user: "root"
+  #go_kubernetes_db_password: "passw0rd"
