@@ -24,11 +24,12 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 5. Run kubectl apply -f go-kubernetes-apps-configmap.yml
-6. Run kubectl apply -f go-kubernetes-apps-deployment.yml
-7. Check deployment, pods and service. Make sure all running well
-8. Run kubectl cluster-info to get IP cluster
-9. Test hit apps using http://cluster-ip:service-port/
-10. List Endpoint
+6. Run kubectl apply -f go-kubernetes-apps-secret.yml
+7. Run kubectl apply -f go-kubernetes-apps-deployment.yml
+8. Check deployment, pods and service. Make sure all running well
+9. Run kubectl cluster-info to get IP cluster
+10. Test hit apps using http://cluster-ip:service-port/
+11. List Endpoint
    - /
    - /healt-check
    - /readiness
